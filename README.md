@@ -15,4 +15,4 @@ The program takes in 6 required parameters and some information about them is ou
 - **ROH Cutoff:** Refers to how long your ROH stretches have to be in nucleotides in order to be called a ROH stretch. For example a value of “5000000” refers to a cutoff of 5 Mb.
 - **ROH Threshold:** This threshold is given to remove regions that have a small number of SNP and therefore could give rise to spurious results. The value refers to how many standard deviations from the mean number of SNP that are removed. For instance a value of 2 refers to any window that contains less than 2 * Average SNP will be removed.
 - **Threads:** Number of cores to utilize when constructing relationship matrix.
-- **OUT_FILE:** Name of file to output relationship. Relationship are outputted in triplet form. 
+- **Out File:** Name of file to output relationship. Has to be one word. Relationships are outputted in triplet form. 
