@@ -1,6 +1,6 @@
 # ROH_Relationship
 
-C++ code that I have used to create a Run of Homozygosity (ROH) based relationship matrix. A full description of how it is calculated is outlined in "Characterization and management of long runs of homozygosity in parental nucleus lines and their associated crossbred progeny".
+C++ code that I have used to create a Run of Homozygosity (ROH) based relationship matrix. A full description of how it is calculated is outlined in "Characterization and management of long runs of homozygosity in parental nucleus lines and their associated crossbred progeny". An updated version that generated errors if input parameters are not formated correctly was uploaded on May 5, 2018.
 
 ## To Compile and Run
 Compile: g++ -O3 -fopenmp -lpthread ROH_Rel.cpp -o ROH_Relationship
