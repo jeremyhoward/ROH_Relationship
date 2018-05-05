@@ -48,22 +48,39 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    cout <<"+-----+-----+-----+-----+-----+-----+-----+------+-----+" << endl;
-    cout <<"|                                         ///\\\\\\        |" << endl;
-    cout <<"|                                        /      \\       |" << endl;
-    cout <<"|  Optimized Run-of-Homozygosity        #-/.\\==/.\\      |" << endl;
-    cout <<"|  Genomic Relationship Creator        (, \\_/ \\\\_/      |" << endl;
-    cout <<"|  Author: Jeremy T. Howard             |    -`  |      |" << endl;
-    cout <<"|  Updated: Date: 8/21/2016              \\  \\_/ /       |" << endl;
-    cout <<"|                                       /`-.__.`        |" << endl;
-    cout <<"|                                    .-'`-.___|__       |" << endl;
-    cout <<"+-----+-----+-----+-----+-----+-----+-----+------+-----+" << endl;
-    cout <<"| This program is free software: you can redistribute  |" << endl;
-    cout <<"| it and/or modify it under the terms of the GNU       |" << endl;
-    cout <<"| General Public License as published by the Free      |" << endl;
-    cout <<"| Software Foundation, either version 3 of the License,|" << endl;
-    cout <<"| or (at your option) any later version.               |" << endl;
-    cout <<"+-----+-----+-----+-----+-----+-----+-----+------+-----+" <<endl;
+    cout<<"\n###############################################################\n";
+    cout<<"####################################################   ########\n";
+    cout<<"################################################   /~|   ######\n";
+    cout<<"#############################################   _- `~~~', #####\n";
+    cout<<"###########################################  _-~       )  #####\n";
+    cout<<"########################################  _-~          |  #####\n";
+    cout<<"#####################################  _-~            ;  ######\n";
+    cout<<"###########################  __---___-~              |   ######\n";
+    cout<<"########################   _~   ,,                  ;  `,,  ###\n";
+    cout<<"######################  _-~    ;'                  |  ,'  ; ###\n";
+    cout<<"####################  _~      '                    `~'   ; ####\n";
+    cout<<"#############   __---;                                 ,' #####\n";
+    cout<<"#########   __~~  ___                                ,' #######\n";
+    cout<<"######  _-~~   -~~ _          N                    ,' #########\n";
+    cout<<"###### `-_         _           C                  ; ###########\n";
+    cout<<"########  ~~----~~~   ;         S                ; ############\n";
+    cout<<"##########  /          ;         U               ; ############\n";
+    cout<<"########  /             ;                      ; ##############\n";
+    cout<<"######  /                `                    ; ###############\n";
+    cout<<"####  /                                      ; ################\n";
+    cout<<"##                                            #################\n";
+    cout <<"+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+ " <<endl;
+    cout <<"| This program is free software: you can redistribute it and |" << endl;
+    cout <<"| /or modify it under the terms of the GNU General Public    |" << endl;
+    cout <<"| License as published by the Free Software Foundation,      |" << endl;
+    cout <<"| either version 3 of the License, or (at your option) any   |" << endl;
+    cout <<"| later version.                                             |" << endl;
+    cout <<"+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+ " <<endl;
+    cout <<"|  Optimized Run-of-Homozygosity                             |" << endl;
+    cout <<"|  Genomic Relationship Creator                              |" << endl;
+    cout <<"|  Author: Jeremy T. Howard                                  |" << endl;
+    cout <<"|  Updated: Date: May 5, 2018                                |" << endl;
+    cout <<"+-----+-----+-----+-----+-----+-----+-----+------+-----+-----+ " <<endl;
     if(argc != 7){cout << "Wrong nummber of parameters given" << endl; exit (EXIT_FAILURE);}
     time_t begin_time = time(0);
     cout << "- Parameter File Information:" << endl;
@@ -106,16 +123,51 @@ int main(int argc, char* argv[])
     int index[rows];
     for(int i = 0; i < numbers.size(); i++)
     {
-        /* grab chromosome number */
-        string temp = numbers[i];
-        size_t pos = temp.find(" ", 0);
-        string tempa = temp.substr(0,pos);
-        chr[i] = atoi(tempa.c_str());
-        /* grab position Mb */
-        temp.erase(0, pos+1);
-        positionMb[i] = atoi(temp.c_str());
-        /* Save index */
-        index[i] = i;
+        string temp = numbers[i];                       // grab a line
+        /* Check to see if tab delimeter exists */
+        size_t pos = temp.find("\t", 0);                 // Find position where delimiter is at
+        if(pos != std::string::npos){cout << endl << "Delimeter in Map file is a tab!! Needs to be a space." << endl; exit (EXIT_FAILURE);}
+        else{
+            vector < string > solvervariables(31,"");
+            for(int j = 0; j < 31; j++)
+            {
+                size_t pos = temp.find(" ",0);
+                solvervariables[j] = temp.substr(0,pos);
+                solvervariables[j].erase(remove(solvervariables[j].begin(), solvervariables[j].end(), ' '),solvervariables[j].end());
+                if(pos != std::string::npos){temp.erase(0, pos + 1);}
+                if(pos == std::string::npos){temp.clear(); j = 31;}
+            }
+            int start = 0;
+            while(start < solvervariables.size())
+            {
+                if(solvervariables[start] == ""){solvervariables.erase(solvervariables.begin()+start);}
+                if(solvervariables[start] != ""){start++;}
+            }
+            if(solvervariables.size() != 2)
+            {
+                cout<<endl<<"Map file did not get parsed out to chr and pos correctly (Line"<< i+1 << ")!!"<<endl;
+                exit (EXIT_FAILURE);
+            }
+            chr[i] = atoi(solvervariables[0].c_str());          // Convert it to an integer
+            positionMb[i] = atoi(solvervariables[1].c_str());                   // Convert it to an integer
+            index[i] = i;
+        }
+    }
+    cout << "       - First line got parsed out to: " << endl;
+    cout << "           - Chromosome: '" << chr[0] << "'" << endl;
+    cout << "           - Position: '" << positionMb[0] << "'" << endl;
+    numbers.clear();                                    // clear vector that holds each row
+    /* Double check to make sure it is ordered chr and pos */
+    for(int i = 1; i < chr.size(); i++)
+    {
+        if(chr[i] == chr[i-1])
+        {
+            if(positionMb[i] < positionMb[i-1])
+            {
+                cout<<endl<<"Map file is not sorted chromosome then position (Look at line "<<i<<" "<<i-1<<")!!"<<endl;
+                exit (EXIT_FAILURE);
+            }
+        }
     }
     numbers.clear();
     cout << "   - Indexing Positions for ROH:" << endl;
@@ -194,13 +246,31 @@ int main(int argc, char* argv[])
     infile1.open(genofile.c_str());
     while (getline(infile1,line))
     {
-        /* Grab Individual ID */
-        size_t pos = line.find(" ",0);
-        string tempa = line.substr(0,pos);
-        ID.push_back(tempa);
-        line.erase(0,pos+1);
-        /* Grab Genotype string */
-        geno.push_back(line);
+        size_t pos = line.find("\t", 0);                 // Find position where delimiter is at
+        if(pos != std::string::npos){cout << endl << "Delimeter in Genotype file is a tab!! Needs to be a space." << endl; exit (EXIT_FAILURE);}
+        /* Check to make sure it has two column ID and genotype */
+        vector < string > solvervariables(31,"");
+        for(int j = 0; j < 31; j++)
+        {
+            size_t pos = line.find(" ",0);
+            solvervariables[j] = line.substr(0,pos);
+            solvervariables[j].erase(remove(solvervariables[j].begin(), solvervariables[j].end(), ' '),solvervariables[j].end());
+            if(pos != std::string::npos){line.erase(0, pos + 1);}
+            if(pos == std::string::npos){line.clear(); j = 31;}
+        }
+        int start = 0;
+        while(start < solvervariables.size())
+        {
+            if(solvervariables[start] == ""){solvervariables.erase(solvervariables.begin()+start);}
+            if(solvervariables[start] != ""){start++;}
+        }
+        if(solvervariables.size() != 2)
+        {
+            cout<<endl<<"Genotype file did not get parsed out to chr and pos correctly (Line"<< i+1 << ")!!"<<endl;
+            exit (EXIT_FAILURE);
+        }
+        ID.push_back(solvervariables[0]);                                /* Save ID */
+        geno.push_back(solvervariables[1]);                              /* Save Genotype File */
     }
     cout << "   - Number of animals with genotypes: " << geno.size() << "." << endl;
     cout << "   - Number of Genotypes per animal: " << geno[0].size() << "." << endl << endl;
